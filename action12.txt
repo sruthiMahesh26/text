@@ -1,0 +1,47 @@
+ Step 1: Add Secret in GitHub
+Go to:
+Repo → Settings → Secrets → Actions → New repository secret
+
+Add:
+
+Name: API_KEY
+Value: mysecret123
+👉 Similarly you can add:
+
+DB_PASSWORD = db123
+📄 Step 2: Create Workflow File
+Create:
+
+.github/workflows/secrets.yml
+✅ Simple Full Code
+name: Secrets Demo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # a & b: use secret as env variable
+      - name: Use API Key
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        run: echo "API Key is $API_KEY"
+
+      # c: authenticate with service using secret
+      - name: Authenticate
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        run: echo "Authenticating with API using $API_KEY"
+
+      # d: pass database password securely
+      - name: Use DB Password
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: echo "Connecting to DB with password $DB_PASSWORD"
